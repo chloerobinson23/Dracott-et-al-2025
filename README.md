@@ -1,1 +1,1 @@
-Raw acoustic data and associated metadata for Dracott, D., Robinson, C.V., Dares, L., Woodley, E., Migneault, A., & Birdsall, C. (2025). Influence of vessel disturbance on Pacific harbour porpoise (Phocoena phocoena vomerina) echolocation. Ecological Applications (accepted May 2025).
+Acoustic datasheets and associated R scripts for Dracott, D., Robinson, C.V., Dares, L., Woodley, E., Migneault, A., & Birdsall, C. (2025). Influence of vessel disturbance on Pacific harbour porpoise (Phocoena phocoena vomerina) echolocation. Ecological Applications (accepted May 2025).
