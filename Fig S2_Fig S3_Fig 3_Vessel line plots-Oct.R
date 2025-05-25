@@ -75,10 +75,6 @@ ggsave("Figure3_fast_vessels_monthly.tiff", plot3, dpi=400, width = 7, height = 
 
 #read in visual data
 
-hp2 <- read.csv(("F_NF_CPOD_vessels.csv"),stringsAsFactors = FALSE)
-attach(hp2)
-str(hp2)
-
 hp2b <- read.csv(("F_NF_CPOD_vessels_v2.csv"),stringsAsFactors = FALSE)
 attach(hp2b)
 str(hp2b)
