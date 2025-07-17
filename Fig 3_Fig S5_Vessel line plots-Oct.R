@@ -39,7 +39,7 @@ plot2
 
 
 #save plot
-ggsave("FigureS2_Tugs_monthly.tiff", plot2, dpi=400,width = 7, height = 5)
+ggsave("Tugs_monthly.tiff", plot2, dpi=600,width = 7, height = 5)
 
 
 
@@ -69,7 +69,7 @@ plot3
 
 
 #save plot
-ggsave("Figure3_fast_vessels_monthly.tiff", plot3, dpi=400, width = 7, height = 5)
+ggsave("Figure3_fast_vessels_monthly.pdf", plot3, width = 16, height = 12, units = "cm", dpi = 600)
 
 
 
@@ -93,50 +93,86 @@ mydata<-data.frame(
   vessels_SD= c(31.8,18.5,102.8,266.6,149.9,48.5,104.2,29.4,46.8)
 )
 
-mydata
+# Add variable for data type
+mydata_long <- mydata
+mydata_long$DPM_F_type <- "DPM_F"
+mydata_long$DPM_NF_type <- "DPM_NF"
+mydata_long$vessels_type <- "vessels"
 
+# Colour mapping
+colour_map <- c(
+  "DPM_F" = "blue",
+  "DPM_NF" = "lightblue",
+  "vessels" = "black"
+)
 
-dpmColour<- "blue"
-dpmColour2<- "lightblue"
-vesselColour<- "black"
+# Scale vessel values for plotting on same axis
+vessel_scale <- 1/5
 
-plot5 <- ggplot(mydata, aes(x=month))+
-  geom_line(data=mydata,aes(x=month, y=DPM_F, color=dpmColour))+
-  geom_line(data=mydata,aes(x=month, y=DPM_NF, color=dpmColour2))+
-  geom_line(data=mydata,aes(x=month, y=vessels), color=vesselColour)+
-  geom_errorbar(aes(ymin=DPM_F-DPM_F_SD, ymax=DPM_F+DPM_F_SD), width=.2)+
-  geom_errorbar(aes(ymin=DPM_NF-DPM_NF_SD, ymax=DPM_NF+DPM_NF_SD), width=.2)+
-  geom_errorbar(aes(ymin=vessels-vessels_SD, ymax=vessels+vessels_SD), width=.2)+
-  scale_color_identity(guide = "legend", name="Data Type",labels = c("Foraging DPM/hr", "Non-Foraging DPM/hr","Number of Vessels"))+
-  labs (x="Month", y = "Click Trains/Min")+
-  theme_bw()+
+plot5 <- ggplot(mydata, aes(x = month)) +
+  # Foraging DPM line and error bars
+  geom_line(aes(y = DPM_F, color = "DPM_F")) +
+  geom_errorbar(aes(
+    ymin = DPM_F - DPM_F_SD,
+    ymax = DPM_F + DPM_F_SD,
+    color = "DPM_F"
+  ), width = 0.2) +
+  
+  # Non-foraging DPM line and error bars
+  geom_line(aes(y = DPM_NF, color = "DPM_NF")) +
+  geom_errorbar(aes(
+    ymin = DPM_NF - DPM_NF_SD,
+    ymax = DPM_NF + DPM_NF_SD,
+    color = "DPM_NF"
+  ), width = 0.2) +
+  
+  # Vessels line and error bars (scaled)
+  geom_line(aes(y = vessels * vessel_scale, color = "vessels")) +
+  geom_errorbar(aes(
+    ymin = (vessels - vessels_SD) * vessel_scale,
+    ymax = (vessels + vessels_SD) * vessel_scale,
+    color = "vessels"
+  ), width = 0.2) +
+  
+  scale_color_manual(
+    name = "Data Type",
+    values = colour_map,
+    labels = c("Foraging DPM/min", "Non-Foraging DPM/min", "Number of Vessels")
+  ) +
+  labs(x = "Month", y = "Click Trains/Min") +
+  scale_x_continuous(
+    limits = c(5, 12),
+    breaks = 5:12,
+    labels = c("May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+  ) +
+  scale_y_continuous(
+    name = "Click Trains/Min",
+    sec.axis = sec_axis(~ . * (1 / vessel_scale), name = "Total number of vessels")
+  ) +
+  theme_bw() +
   theme(
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
-    axis.text.x = element_text(size=14, angle = 45, hjust = 1),
-    axis.text.y = element_text(size=14),
-    axis.title.x = element_text(face = "bold", size=14),
-    axis.title.y = element_text(face="bold", size=14),
-    axis.title.y.right = element_text(face="bold", size=14, color="black", vjust = 0.5),
+    axis.text.x = element_text(size = 14, angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 14),
+    axis.title.x = element_text(face = "bold", size = 14),
+    axis.title.y = element_text(face = "bold", size = 14),
+    axis.title.y.right = element_text(face = "bold", size = 14, color = "black", vjust = 0.5),
     legend.position = "bottom",
-    legend.text = element_text(size = 14, colour = "black"),
-    legend.title = element_text(size=14, face = "bold"))+
-  scale_x_continuous(name="Month",limits=c(5, 12), breaks = c(5,6,7,8,9,10,11,12),
-                     labels=c("May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))+
-  scale_y_continuous(sec.axis = sec_axis(~.*5, name="Total number of vessels"))
+    legend.text = element_text(size = 14),
+    legend.title = element_text(size = 14, face = "bold")
+  )
 
 
 plot5
 
 
-
 #save plot
-ggsave("FigureS3_vessel total_sum_F_CL_v2.tiff", plot5, dpi=400, width = 10, height = 5)
+ggsave("FigureS5_vessel total_sum_F_CL_v2.tiff", plot5, dpi=600, width = 10, height = 5)
 
 
 
 ################################################
 #### END #######################################
 ###############################################
-
 
